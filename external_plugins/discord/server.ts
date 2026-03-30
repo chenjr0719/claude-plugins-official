@@ -800,8 +800,9 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 })
 
 client.on('messageCreate', msg => {
-  // Allow messages from other bots (for bot-to-bot communication),
-  // but ignore our own messages to prevent infinite loops.
+  // Only ignore messages from ourselves — allows bot-to-bot communication.
+  // The gate()/allowFrom logic provides the second layer of access control.
+  // See: chenjr0719/claude-plugins-official#1, anthropics/claude-plugins-official#1153
   if (msg.author.id === client.user?.id) return
   handleInbound(msg).catch(e => process.stderr.write(`discord: handleInbound failed: ${e}\n`))
 })
